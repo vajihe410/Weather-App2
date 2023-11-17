@@ -17,7 +17,7 @@ body{
 header{
     background:linear-gradient(13deg ,var(--primary-color) 47%,var(--primary-color) 100%);
     box-shadow: var(--secondary-color) 0px 20px 100px 0px;
-    padding: 100px 0 200px ;
+    padding: 50px 0 140px ;
     border-radius: 0 0 40px 40px;
     display: flex;
     justify-content: center;
@@ -70,7 +70,7 @@ header button:hover{
     margin-bottom: 50px;
     position: relative;
     bottom: 80px;
-   box-shadow: var(--secondary-color) 0px 25px 80px -25px;
+    box-shadow: var(--secondary-color) 0px 25px 80px -25px;
 }
 #weather h1{
     color: var(--primary-color);
@@ -103,6 +103,7 @@ header button:hover{
 #forecast{
     display: flex;
     justify-content: space-between;
+    margin-top: -60px;
 }
 #forecast div{
     width: 150px;
