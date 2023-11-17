@@ -90,7 +90,7 @@ const renderForecastWeather = (forecastDatas) => {
     forecastDatas.forEach(item => {
         const forecastJSX = `<div>
                                 <img src="https://openweathermap.org/img/w/${item.weather[0].icon}.png" alt="weather icon" />
-                                <h3>${DAYS[new Date(item * 1000).getDay()]}}</h3>
+                                <h3>${DAYS[new Date(item.dt * 1000).getDay()]}</h3>
                                 <p>${Math.round(item.main.temp)}°C</p>
                                 <span>${item.weather[0].main}</span>
                             </div>`
