@@ -1,5 +1,5 @@
-const BASE_URL = "https://api.openweathermap.org/data/2.5"
-const API_KEY = "b517342078011693494fa46cc3b8dec9"
+import getWeatherData from "./utils/httpRequest"
+
 const DAYS = [
     "Sunday",
     "Monday",
@@ -16,30 +16,7 @@ const locatinIcon = document.getElementById("location")
 const weatherContainer = document.getElementById("weather")
 const forecastContainer = document.getElementById("forecast")
 
-const getCurrentWeatherByName = async (cityName) => {
-    const url = `${BASE_URL}/weather?q=${cityName}&appid=${API_KEY}&units=metric`
-    const response = await fetch(url)
-    const json = await response.json()
-    return json
-}
-const getCurrentWeatherByIcon = async (lat,lon) => {
-    const url = `${BASE_URL}/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`
-    const response = await fetch(url)
-    const json = await response.json()
-    return json
-}
-const getForecastWeather = async (cityName) => {
-    const url = `${BASE_URL}/forecast?q=${cityName}&appid=${API_KEY}&units=metric`
-    const response = await fetch(url)
-    const json = await response.json()
-    return json
-}
-const getForecastWeatherByIcon = async (lat,lon) => {
-    const url = `${BASE_URL}/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`
-    const response = await fetch(url)
-    const json = await response.json()
-    return json
-}
+
 const renderCurrentWeather = (currentData) => {
     const weatherJSX = `<div>
                             <h1>${currentData.name}, ${currentData.sys.country}</h1>
@@ -62,18 +39,17 @@ const searchHandler =async () =>{
         alert("please enter city name")
     }
     else{
-        const currentData = await getCurrentWeatherByName(cityName)
+        const currentData = await getWeatherData("current",cityName)
         renderCurrentWeather(currentData)
-        const foreCastData = await getForecastWeather(cityName)
+        const foreCastData = await getWeatherData("forecast",cityName)
         renderForecastWeather(foreCastData)
     }
 }
 
 const positionCallBack =async (position) => {
-    const {latitude, longitude} = position.coords
-    const currentData = await getCurrentWeatherByIcon(latitude,longitude)
+    const currentData = await getWeatherData("current", position.coords)
     renderCurrentWeather(currentData)
-    const forecastData = await getForecastWeatherByIcon(latitude,longitude)
+    const forecastData = await getWeatherData("forecast", position.coords)
     renderForecastWeather(forecastData)
 }
 
