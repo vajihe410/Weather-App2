@@ -34,6 +34,12 @@ const getForecastWeather = async (cityName) => {
     const json = await response.json()
     return json
 }
+const getForecastWeatherByIcon = async (lat,lon) => {
+    const url = `${BASE_URL}/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`
+    const response = await fetch(url)
+    const json = await response.json()
+    return json
+}
 const renderCurrentWeather = (currentData) => {
     const weatherJSX = `<div>
                             <h1>${currentData.name}, ${currentData.sys.country}</h1>
@@ -65,9 +71,10 @@ const searchHandler =async () =>{
 
 const positionCallBack =async (position) => {
     const {latitude, longitude} = position.coords
-    console.log(latitude,longitude)
     const currentData = await getCurrentWeatherByIcon(latitude,longitude)
     renderCurrentWeather(currentData)
+    const forecastData = await getForecastWeatherByIcon(latitude,longitude)
+    renderForecastWeather(forecastData)
 }
 
 const errorCallBack = (error) => {
@@ -84,9 +91,8 @@ const locationHandler = () => {
 }
 
 const renderForecastWeather = (forecastDatas) => {
-    console.log(forecastDatas)
+    forecastContainer.innerHTML=""
     forecastDatas = forecastDatas.list.filter((day) =>  day.dt_txt.endsWith("12:00:00"))
-    console.log(forecastDatas)
     forecastDatas.forEach(item => {
         const forecastJSX = `<div>
                                 <img src="https://openweathermap.org/img/w/${item.weather[0].icon}.png" alt="weather icon" />
