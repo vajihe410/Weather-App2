@@ -1,4 +1,5 @@
-import getWeatherData from "./utils/httpRequest"
+import getWeatherData from "./utils/httpRequest.js"
+import { showModal, removeModal } from "./utils/modal.js"
 
 const DAYS = [
     "Sunday",
@@ -15,9 +16,11 @@ const searchButton = document.querySelector("header button")
 const locatinIcon = document.getElementById("location")
 const weatherContainer = document.getElementById("weather")
 const forecastContainer = document.getElementById("forecast")
+const modalButton = document.querySelector("#modal span")
 
 
 const renderCurrentWeather = (currentData) => {
+   
     const weatherJSX = `<div>
                             <h1>${currentData.name}, ${currentData.sys.country}</h1>
                             <div id="main">
@@ -36,7 +39,8 @@ const renderCurrentWeather = (currentData) => {
 const searchHandler =async () =>{
     const cityName = searchInput.value 
     if(!cityName){
-        alert("please enter city name")
+        showModal("please enter city name")
+        return
     }
     else{
         const currentData = await getWeatherData("current",cityName)
@@ -54,7 +58,7 @@ const positionCallBack =async (position) => {
 }
 
 const errorCallBack = (error) => {
-    alert(error.message)
+    showModal(error.message)
 }
 
 const locationHandler = () => {
@@ -62,7 +66,7 @@ const locationHandler = () => {
         navigator.geolocation.getCurrentPosition(positionCallBack, errorCallBack)
     }
     else{
-        alert("your browser does not support geolocation")
+        showModal("your browser does not support geolocation")
     }
 }
 
@@ -80,5 +84,13 @@ const renderForecastWeather = (forecastDatas) => {
     })
 }
 
+const initHandler =async () => {
+    const currentData = await getWeatherData("current","tehran")
+    renderCurrentWeather(currentData)
+    const foreCastData = await getWeatherData("forecast","tehran")
+    renderForecastWeather(foreCastData)
+}
+modalButton.addEventListener("click" ,removeModal)
 searchButton.addEventListener("click", searchHandler)
 locatinIcon.addEventListener("click",locationHandler)
+document.addEventListener("DOMContentLoaded" ,initHandler)
